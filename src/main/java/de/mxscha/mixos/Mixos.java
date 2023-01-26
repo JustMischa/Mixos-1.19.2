@@ -1,6 +1,8 @@
 package de.mxscha.mixos;
 
 import com.mojang.logging.LogUtils;
+import de.mxscha.mixos.item.ModItems;
+import de.mxscha.mixos.item.group.ModCreativeTabs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -32,13 +34,28 @@ public class Mixos {
 
     public Mixos() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        registerMixos(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
     }
 
-    private void addCreative(CreativeModeTabEvent.BuildContents event) {
+    private void registerMixos(IEventBus eventBus) {
+        ModItems.register(eventBus);
+    }
 
+    private void addCreative(CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == ModCreativeTabs.MIXOS_TAB) {
+            event.accept(ModItems.SAPPHIRE_GEM);
+            event.accept(ModItems.RUBY_GEM);
+            event.accept(ModItems.JADE_GEM);
+            event.accept(ModItems.ELECTRIC_ALLOY);
+            event.accept(ModItems.TIN_INGOT);
+            event.accept(ModItems.ENDER_INGOT);
+            event.accept(ModItems.CAERULA_INGOT);
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
